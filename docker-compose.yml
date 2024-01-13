@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_HOST=postgrest
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=postgres
+
+  alembic:
+    build: .
+    command: alembic upgrade head
+    depends_on:
+      - postgres  
+  
+  web2py:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+
